@@ -1,8 +1,10 @@
 /* LANGUAGES */
 const languages = {
   available: {
-    en_us: { name: "English Estados Unidos" },
+    de_de: { name: "Deutsch" },
+    en_us: { name: "English United States" },
     es_es: { name: "Español España" },
+    es_mx: { name: "Español México" },
   },
   default: "en_us",
 };
@@ -78,6 +80,14 @@ const sectionData = [
       "chestplate": true,
       "leggings": true,
       "boots": true
+    }
+  },
+  {
+    "id": "breach",
+    "level": 4,
+    "logo": "assets/tab_icon.gif",
+    "items": {
+      "mace": true
     }
   },
   {
@@ -193,14 +203,6 @@ const sectionData = [
       "pickaxe": true,
       "shovel": true,
       "hoe": true
-    }
-  },
-  {
-    "id": "fracture",
-    "level": 4,
-    "logo": "assets/tab_icon.gif",
-    "items": {
-      "mace": true
     }
   },
   {

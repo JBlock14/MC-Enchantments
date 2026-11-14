@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>MC Enchantments</title>
     <link rel="stylesheet" href="code.css" />
-    <link rel="icon" href="assets/tab_icon.gif" type="image/gif" />
+    <link rel="icon" href="assets/favicon.ico" sizes="any" />
     <link rel="manifest" href="manifest.json" />
-    <meta name="theme-color" content="#1e1e1e" />
+    <meta name="theme-color" content="#071427" />
+    <meta name="description" content="Minecraft enchantment guide">
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
@@ -17,10 +18,10 @@
     <div class="bar">
       <div class="search-wrapper">
         <img src="assets/search.png" alt="search" class="search-icon" />
-        <input placeholder="" class="search" id="search" />
+        <input placeholder="" class="search" id="search" aria-label="Search" />
       </div>
       <div class="filter-wrapper" data-name="">
-        <div id="filterBtn" class="filter-btn">
+        <div id="filterBtn" class="filter-btn" role="button" tabindex="0" aria-label="Filters">
           <img src="assets/filter.png" class="filter-normal" alt="Filter" />
           <img src="assets/filter_action.png" class="filter-hover" alt="Active filter" />
         </div>
@@ -37,10 +38,10 @@
       </div>
     </div>
     <div id="helpOverlay" class="help-overlay">
-      <div class="help-menu">
+      <div class="help-menu" role="dialog" aria-modal="true" aria-label="Help">
         <div class="help-header">
           <span>/help</span>
-          <button class="close-btn">
+          <button class="close-btn" aria-label="Close">
             <img src="assets/close.png" class="close-normal" alt="Close" />
             <img src="assets/close_action.png" class="close-hover" alt="Close" />
           </button>
@@ -49,13 +50,14 @@
       </div>
     </div>
     <div class="active-filters" id="activeFilters"></div>
+    <p class="no-results" id="noResults" hidden></p>
     <div class="section-container" id="sectionContainer"></div>
     <footer id="footer">
       <div id="footerText"></div>
       <button id="supportButton"></button>
       <div id="legalText"></div>
     </footer>
-    <script src="external_functions/marked.js"></script>
+    <script src="external_functions/marked.umd.js"></script>
     <script src="data.js"></script>
     <script src="code.js"></script>
   </body>

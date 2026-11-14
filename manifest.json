@@ -5,22 +5,13 @@
   "start_url": "/MC-Enchantments/",
   "scope": "/MC-Enchantments/",
   "display": "standalone",
-  "orientation": "portrait",
   "background_color": "#071427",
   "theme_color": "#071427",
 
   "icons": [
-    {
-      "src": "assets/app_icon/x192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "assets/app_icon/x512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
+    { "src": "assets/app_icon/x192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "assets/app_icon/x192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "assets/app_icon/x512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "assets/app_icon/x512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ]
 }
