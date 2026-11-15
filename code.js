@@ -18,6 +18,8 @@ const currentLanguageText = document.getElementById("currentLanguage");
 /* Help */
 const helpOverlay = document.getElementById("helpOverlay");
 const helpContent = document.getElementById("helpContent");
+/* Theme */
+let themeLink = document.getElementById("themeStylesheet");
 /* Footer */
 const footerText = document.getElementById("footerText");
 const supportButton = document.getElementById("supportButton");
@@ -28,8 +30,15 @@ const legalText = document.getElementById("legalText");
 const availableLanguages = Object.keys(languages.available);
 const langCache = {};
 let currentLanguage = languages.default;
+let helpChecked = false;
 let translations = {};
 let loadToken = 0;
+/* Theme */
+let currentTheme = themes.default;
+try {
+  const savedTheme = localStorage.getItem("selectedTheme");
+  if (savedTheme && Object.hasOwn(themes.available, savedTheme)) currentTheme = savedTheme;
+} catch {}
 /* Filters */
 let activeFilters = [];
 /* Dropdowns */
@@ -64,7 +73,7 @@ function focusStep(elements, step) {
 
 /* COMPONENTS */
 /* Modal */
-function setupModal({ overlayId, menuSelector = ".help-menu", closeButtonSelector = ".close-btn", blockScroll = false }) {
+function setupModal({ overlayId, menuSelector = ".help-menu", closeButtonSelector = ".close-btn", blockScroll = false, onOpen, onClose }) {
   const overlay = document.getElementById(overlayId);
   const menu = overlay.querySelector(menuSelector);
   const closeButton = overlay.querySelector(closeButtonSelector);
@@ -76,6 +85,7 @@ function setupModal({ overlayId, menuSelector = ".help-menu", closeButtonSelecto
     if (blockScroll) {
       document.body.classList.add("modal-open");
     }
+    if (onOpen) onOpen();
   }
   function close() {
     overlay.style.display = "none";
@@ -83,6 +93,7 @@ function setupModal({ overlayId, menuSelector = ".help-menu", closeButtonSelecto
     if (blockScroll) {
       document.body.classList.remove("modal-open");
     }
+    if (onClose) onClose();
   }
   closeButton.addEventListener("click", close);
   overlay.addEventListener("click", (e) => {
@@ -152,6 +163,10 @@ async function loadLanguage(lang) {
     renderSections(sectionData);
     createFilterOptions();
     applyFilters();
+    if (!helpChecked) {
+      helpChecked = true;
+      if (location.hash === "#help") openHelp();
+    }
   } catch (error) {
     console.error(error);
     if (lang !== languages.default) {
@@ -483,6 +498,8 @@ const helpModal = setupModal({
   menuSelector: ".help-menu",
   closeButtonSelector: ".close-btn",
   blockScroll: true,
+  onOpen: updateURL,
+  onClose: updateURL,
 });
 async function openHelp() {
   helpModal.open();
@@ -495,6 +512,37 @@ async function openHelp() {
   helpContent.innerHTML = marked.parse(text);
 }
 
+/* THEME */
+function setTheme(name) {
+  if (!Object.hasOwn(themes.available, name) || name === currentTheme) return;
+  const link = document.createElement("link");
+  link.rel = "stylesheet";
+  link.href = themes.available[name].file;
+  link.addEventListener("load", () => {
+    themeLink.remove();
+    link.id = "themeStylesheet";
+    themeLink = link;
+    currentTheme = name;
+    try { localStorage.setItem("selectedTheme", name); } catch {}
+  });
+  link.addEventListener("error", () => link.remove());
+  document.head.appendChild(link);
+}
+
+/* URL */
+function updateURL() {
+  const url = new URL(location.href);
+  url.searchParams.delete("q");
+  url.searchParams.delete("cmd");
+  const text = search.value.trim();
+  if (text.startsWith("/")) {
+    url.searchParams.set("cmd", text.slice(1));
+  } else if (text) {
+    url.searchParams.set("q", text);
+  }
+  url.hash = helpOverlay.style.display === "flex" ? "help" : "";
+  history.replaceState(null, "", url);
+}
 /* SEARCH */
 /* Commands and Tags */
 search.addEventListener("input", () => {
@@ -507,6 +555,16 @@ search.addEventListener("input", () => {
   const slashIndex = text.indexOf("/");
   if (slashIndex > 0) {
     search.value = text.substring(0, slashIndex);
+    return;
+  }
+  const themeMatch = text.match(/^\/theme\s+(\S+)$/i);
+  if (themeMatch && Object.hasOwn(themes.available, themeMatch[1].toLowerCase())) {
+    search.value = "";
+    search.classList.remove("command-mode");
+    search.blur();
+    setTheme(themeMatch[1].toLowerCase());
+    updateURL();
+    applyFilters();
     return;
   }
   if (text === "/help") {
@@ -541,10 +599,7 @@ search.addEventListener("input", () => {
     }
     search.value = search.value.replace(fullTag, "");
   });
-  const url = new URL(location.href);
-  if (search.value.trim()) url.searchParams.set("q", search.value.trim());
-  else url.searchParams.delete("q");
-  history.replaceState(null, "", url);
+  updateURL();
   applyFilters();
 });
 /* Typing Sound */
@@ -703,8 +758,15 @@ marked.use({
   },
 });
 /* Search */
-const initialQuery = new URLSearchParams(location.search).get("q");
-if (initialQuery && !initialQuery.startsWith("/")) search.value = initialQuery;
+const params = new URLSearchParams(location.search);
+const initialQuery = params.get("q");
+const initialCmd = params.get("cmd");
+if (initialQuery && !initialQuery.startsWith("/")) {
+  search.value = initialQuery;
+} else if (initialCmd !== null) {
+  search.value = "/" + initialCmd;
+  search.classList.add("command-mode");
+}
 /* PWA */
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", async () => {

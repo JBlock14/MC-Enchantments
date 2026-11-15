@@ -1,0 +1,2 @@
+Buscar (*) te mostrara todas las maldiciones del juego.
+Buscar cualquier número te dará el que tenga como nivel máximo ese.

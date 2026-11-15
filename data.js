@@ -5,8 +5,19 @@ const languages = {
     en_us: { name: "English United States" },
     es_es: { name: "Español España" },
     es_mx: { name: "Español México" },
+    fr_fr: { name: "Français France" },
+    pt_br: { name: "Português Brasil"},
   },
   default: "en_us",
+};
+
+/* THEMES */
+const themes = {
+  available: {
+    default: { file: "code.css" },
+    modern: { file: "theme/modern.css" },
+  },
+  default: "default",
 };
 
 /* ITEMS MAP */

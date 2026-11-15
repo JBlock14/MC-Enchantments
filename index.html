@@ -4,7 +4,17 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>MC Enchantments</title>
-    <link rel="stylesheet" href="code.css" />
+    <script src="data.js"></script>
+    <script>
+      (function () {
+        var file = themes.available[themes.default].file;
+        try {
+          var saved = localStorage.getItem("selectedTheme");
+          if (saved && Object.hasOwn(themes.available, saved)) file = themes.available[saved].file;
+        } catch (e) {}
+        document.write('<link rel="stylesheet" href="' + file + '" id="themeStylesheet" />');
+      })();
+    </script>
     <link rel="icon" href="assets/favicon.ico" sizes="any" />
     <link rel="manifest" href="manifest.json" />
     <meta name="theme-color" content="#071427" />
@@ -58,7 +68,6 @@
       <div id="legalText"></div>
     </footer>
     <script src="external_functions/marked.umd.js"></script>
-    <script src="data.js"></script>
     <script src="code.js"></script>
   </body>
 </html>

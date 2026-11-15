@@ -1,9 +1,10 @@
-const CACHE_NAME = "Almost-v26.11.14.2";
+const CACHE_NAME = "Almost-v26.11.15.6";
 const PRECACHE = [
   "./",
   "index.html",
   "code.css",
   "code.js",
+  "theme/modern.css",
   "data.js",
   "manifest.json",
   "external_functions/marked.umd.js",
@@ -12,10 +13,14 @@ const PRECACHE = [
   "lang/en_us.lang",
   "lang/es_es.lang",
   "lang/es_mx.lang",
+  "lang/pt_br.lang",
+  "lang/fr_fr.lang",
   "lang/de_de.lang",
   "help_menu/en_us.md",
   "help_menu/es_es.md",
   "help_menu/es_mx.md",
+  "help_menu/pt_br.md",
+  "help_menu/fr_fr.md",
   "help_menu/de_de.md",
   "assets/favicon.ico",
   "assets/tab_icon.gif",
